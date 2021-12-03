@@ -1,14 +1,5 @@
 import Solver from './Solver';
 
-function bin2dec(bin) {
-	let dec = 0;
-	for (let n = 0; n < bin.length; n++) {
-		dec *= 2;
-		if (bin[n] === 1) { dec++; }
-	}
-	return dec;
-}
-
 export class S3a extends Solver {
 	solve(input) {
 		// input = "00100\n11110\n10110\n10111\n10101\n01111\n00111\n11100\n10000\n11001\n00010\n01010";
@@ -34,6 +25,15 @@ export class S3a extends Solver {
 }
 
 export class S3b extends Solver {
+	bin2dec(bin) {
+		let dec = 0;
+		for (let n = 0; n < bin.length; n++) {
+			dec *= 2;
+			if (bin[n] === 1) { dec++; }
+		}
+		return dec;
+	}
+
 	solve(input) {
 		// input = "00100\n11110\n10110\n10111\n10101\n01111\n00111\n11100\n10000\n11001\n00010\n01010";
 		input = input.split('\n').map(s => s.split('').map(n => parseInt(n)));
@@ -47,7 +47,7 @@ export class S3b extends Solver {
 			temp = temp.filter(num => num[n] === c);
 			n++;
 		}
-		oxygen = bin2dec(temp[0]);
+		oxygen = this.bin2dec(temp[0]);
 		temp = input;
 		n = 0;
 		while (temp.length > 1) {
@@ -58,7 +58,7 @@ export class S3b extends Solver {
 			temp = temp.filter(num => num[n] === c);
 			n++;
 		}
-		co2 = bin2dec(temp[0]);
+		co2 = this.bin2dec(temp[0]);
 		this.setState({ solution: `Oxygen generator rating: ${oxygen}\nCO2 scrubber rating: ${co2}\nLife support rating: ${oxygen * co2}` });
 	}
 }
