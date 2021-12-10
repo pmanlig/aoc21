@@ -6,6 +6,7 @@ export default class Solver extends React.Component {
 	show = true;
 	runcontrols = false;
 	running = false;
+	asserts = [];
 
 	async asyncSolve(input) {
 		try {
@@ -46,10 +47,21 @@ export default class Solver extends React.Component {
 		}
 	}
 
+	assert(actual, expect) {
+		this.asserts.push({ actual: actual, expected: expect });
+	}
+
 	solution = p => {
 		if (!this.state.solution) return false;
 		let i = 0;
 		return this.state.solution.toString().split("\n").map(t => <p key={i++}>{t}</p>);
+	}
+
+	assertions = p => {
+		let i = 0;
+		return <div className="tests">
+			{this.asserts.map(a => <p key={i++}>Test {i}: {a.actual === a.expected ? `passed` : `failed, expected ${a.expected} but found ${a.actual}`}</p>)}
+		</div>;
 	}
 
 	render() {
@@ -62,7 +74,10 @@ export default class Solver extends React.Component {
 				<div className="result">
 					{this.customRender ? this.customRender() :
 						(this.state.error ? <div>Error: {this.state.error.toString()}</div> :
-							<this.solution />)}
+							<div>
+								<this.assertions />
+								<this.solution />
+							</div>)}
 				</div>
 			</div>;
 		} catch (e) {

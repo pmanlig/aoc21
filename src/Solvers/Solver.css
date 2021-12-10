@@ -21,3 +21,7 @@
 .solver .result p {
 	margin: 0;
 }
+
+.tests {
+	margin-bottom: 10px;
+}
