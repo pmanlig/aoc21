@@ -1,5 +1,6 @@
 import './Solver.css';
 import React from 'react';
+import { DataMap } from '../util';
 
 export default class Solver extends React.Component {
 	state = {};
@@ -80,6 +81,7 @@ export default class Solver extends React.Component {
 							<div>
 								<this.assertions />
 								<this.solution />
+								{this.state.data && <DataMap data={this.state.data} scale={this.state.scale} stylemap={this.state.stylemap} />}
 							</div>)}
 				</div>
 			</div>;

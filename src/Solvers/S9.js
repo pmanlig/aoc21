@@ -1,5 +1,4 @@
 import Solver from './Solver';
-import { DataMap } from '../util';
 
 export class S9a extends Solver {
 	valueMap = {
@@ -61,14 +60,7 @@ export class S9a extends Solver {
 		lows = lows.map(l => this.createBasin(l, input));
 		lows.sort((a, b) => b.length - a.length);
 		let basinSizes = lows[0].length * lows[1].length * lows[2].length;
-		this.setState({ solution: `Sum of risk levels: ${risk}\nBasins: ${basinSizes}`, input: input });
-	}
-
-	customRender() {
-		return <div>
-			<this.solution />
-			<DataMap data={this.state.input} scale="5" stylemap={b => this.valueMap[b]} />
-		</div>;
+		this.setState({ solution: `Sum of risk levels: ${risk}\nBasins: ${basinSizes}`, data: input, scale: "5", stylemap: b => this.valueMap[b] });
 	}
 }
 
