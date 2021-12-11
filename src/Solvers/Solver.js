@@ -54,10 +54,13 @@ export default class Solver extends React.Component {
 	solution = p => {
 		if (!this.state.solution) return false;
 		let i = 0;
-		return this.state.solution.toString().split("\n").map(t => <p key={i++}>{t}</p>);
+		return <div className="solution-text">
+			{this.state.solution.toString().split("\n").map(t => <p key={i++}>{t}</p>)}
+		</div>;
 	}
 
 	assertions = p => {
+		// if (this.assertions.length === 0) return null;
 		let i = 0;
 		return <div className="tests">
 			{this.asserts.map(a => <p key={i++}>Test {i}: {a.actual === a.expected ? `passed` : `failed, expected ${a.expected} but found ${a.actual}`}</p>)}

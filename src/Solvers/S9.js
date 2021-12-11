@@ -1,6 +1,20 @@
 import Solver from './Solver';
+import { DataMap } from '../util';
 
 export class S9a extends Solver {
+	valueMap = {
+		"0": "#000000",
+		"1": "#1f1f1f",
+		"2": "#2f2f2f",
+		"3": "#4f4f4f",
+		"4": "#5f5f5f",
+		"5": "#6f6f6f",
+		"6": "#8f8f8f",
+		"7": "#9f9f9f",
+		"8": "#bfbfbf",
+		"9": "#cfcfcf"
+	}
+
 	isLow(x, y, map) {
 		if (x > 0 && map[y][x] >= map[y][x - 1]) return false;
 		if (y > 0 && map[y][x] >= map[y - 1][x]) return false;
@@ -47,7 +61,14 @@ export class S9a extends Solver {
 		lows = lows.map(l => this.createBasin(l, input));
 		lows.sort((a, b) => b.length - a.length);
 		let basinSizes = lows[0].length * lows[1].length * lows[2].length;
-		this.setState({ solution: `Sum of risk levels: ${risk}\nbasins: ${basinSizes}` });
+		this.setState({ solution: `Sum of risk levels: ${risk}\nBasins: ${basinSizes}`, input: input });
+	}
+
+	customRender() {
+		return <div>
+			<this.solution />
+			<DataMap data={this.state.input} scale="5" stylemap={b => this.valueMap[b]} />
+		</div>;
 	}
 }
 

@@ -22,6 +22,10 @@
 	margin: 0;
 }
 
+.solution-text {
+	margin-bottom: 10px;
+}
+
 .tests {
 	margin-bottom: 10px;
 }
