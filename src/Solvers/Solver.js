@@ -61,10 +61,9 @@ export default class Solver extends React.Component {
 	}
 
 	assertions = p => {
-		// if (this.assertions.length === 0) return null;
 		let i = 0;
 		return <div className="tests">
-			{this.asserts.map(a => <p key={i++}>Test {i}: {a.actual === a.expected ? `passed` : `failed, expected ${a.expected} but found ${a.actual}`}</p>)}
+			{this.asserts.map(a => <p key={i}>Test {++i}: {a.actual === a.expected ? `passed` : `failed, expected ${a.expected} but found ${a.actual}`}</p>)}
 		</div>;
 	}
 
@@ -79,7 +78,7 @@ export default class Solver extends React.Component {
 					{this.customRender ? this.customRender() :
 						(this.state.error ? <div>Error: {this.state.error.toString()}</div> :
 							<div>
-								<this.assertions />
+								{this.asserts.length > 0 &&  <this.assertions />}
 								<this.solution />
 								{this.state.data && <DataMap data={this.state.data} scale={this.state.scale} stylemap={this.state.stylemap} />}
 							</div>)}
