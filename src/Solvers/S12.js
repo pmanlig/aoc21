@@ -46,6 +46,36 @@ export class S12a extends Solver {
 		return paths;
 	}
 
+	longerPaths3(connections, active) {
+		let paths = this.state.longerPaths || 0;
+		active = active || [{ current: "start", visited: new Set(), dupes: 0 }];
+		let extend = (a, c) => {
+			let to = c[1];
+			if (to === a.current) { to = c[0]; }
+			else if (c[0] !== a.current) { return; }
+
+			if (to === "start") { return; }
+			else if (to === "end") { paths++; }
+			else if (/[A-Z]+/.test(to)) {
+				active.push({ current: to, visited: a.visited, dupes: a.dupes });
+			} else {
+				let dupes = a.dupes + (a.visited.has(to) ? 1 : 0);
+				if (dupes < 2) {
+					active.push({ current: to, visited: new Set([...(a.visited), to]), dupes: dupes });
+				}
+			}
+		}
+		let iterations = 1000;
+		while (active.length > 0 && iterations-- > 0) {
+			let a = active.shift();
+			connections.forEach(c => extend(a, c));
+		}
+		let end = Date.now();
+		this.setState({ longerPaths: paths, active: active, elapsed: end - this.state.start });
+		if (active.length > 0)
+			setTimeout(() => this.longerPaths3(connections, active), 1);
+	}
+
 	longerPaths2(connections) {
 		let paths = this.state.longerPaths || 0;
 		let active = this.state.active || [new Path("start", null)];
@@ -74,14 +104,15 @@ export class S12a extends Solver {
 			setTimeout(() => this.longerPaths2(connections), 1);
 	}
 
-	longerPaths(connections, active) {
+	longerPaths(connections, active, index) {
 		let paths = this.state.longerPaths || 0;
 		active = active || [{ current: "start", visited: [], dupes: 0 }];
+		index = index || 0;
 		let extend = (a, c) => {
 			let to = c[1];
 			if (to === a.current) { to = c[0]; }
 			else if (c[0] !== a.current) { return; }
-			
+
 			if (to === "start") { return; }
 			else if (to === "end") { paths++; }
 			else if (/[A-Z]+/.test(to)) {
@@ -117,14 +148,14 @@ export class S12a extends Solver {
 			}
 		}
 		let iterations = 1000;
-		while (active.length > 0 && iterations-- > 0) {
-			let a = active.shift();
+		while ((index < active.length) && (iterations-- > 0)) {
+			let a = active[index++];
 			connections.forEach(c => extend(a, c));
 		}
 		let end = Date.now();
-		this.setState({ longerPaths: paths, active: active, elapsed: end - this.state.start });
-		if (active.length > 0)
-			setTimeout(() => this.longerPaths(connections, active), 1);
+		this.setState({ longerPaths: paths, elapsed: end - this.state.start });
+		if (index < active.length)
+			setTimeout(() => this.longerPaths(connections, active, index), 1);
 	}
 
 	solve(input) {
