@@ -74,51 +74,46 @@ export class S12a extends Solver {
 			setTimeout(() => this.longerPaths2(connections), 1);
 	}
 
-	longerPaths(connections) {
+	longerPaths(connections, active) {
 		let paths = this.state.longerPaths || 0;
-		let active = this.state.active || [{ current: "start", visited: [], dupes: 0 }];
+		active = active || [{ current: "start", visited: [], dupes: 0 }];
 		let extend = (a, c) => {
-			let from = c[0], to = c[1];
-			if (to === a.current) {
-				from = c[1];
-				to = c[0];
-			}
-			if (from === a.current) {
-				if (to === "end") {
-					paths++;
-				} else {
-					if (/[A-Z]+/.test(to)) {
-						active.push({ current: to, visited: a.visited, dupes: a.dupes });
-					} else if (to !== "start") {
-						//*
-						let visited = a.visited.concat([to]).sort(), dupes = 0;
-						for (let i = 1; i < visited.length; i++) {
-							if (visited[i] === visited[i - 1]) dupes++;
-						}
-						if (dupes < 2) {
-							active.push({ current: to, visited: visited, dupes: dupes });
-						}
-						//*/
-						/*
-						let dupes = a.dupes, visited = a.visited;
-						for (let i = 0; i < visited.length; i++) {
-							if (visited[i] === to) {
-								dupes++;
-								break;
-							}
-						}
-						if (dupes < 2) {
-							active.push({ current: to, visited: visited.concat([to]), dupes: dupes });
-						}
-						//*/
-						/*
-						let dupes = a.dupes + (a.visited.includes(to) ? 1 : 0);
-						if (dupes < 2) {
-							active.push({ current: to, visited: a.visited.concat([to]), dupes: dupes });
-						}
-						//*/
+			let to = c[1];
+			if (to === a.current) { to = c[0]; }
+			else if (c[0] !== a.current) { return; }
+			
+			if (to === "start") { return; }
+			else if (to === "end") { paths++; }
+			else if (/[A-Z]+/.test(to)) {
+				active.push({ current: to, visited: a.visited, dupes: a.dupes });
+			} else {
+				//*
+				let visited = a.visited.concat([to]).sort(), dupes = 0;
+				for (let i = 1; i < visited.length; i++) {
+					if ((visited[i] === visited[i - 1]) && (++dupes === 2)) break;
+				}
+				if (dupes < 2) {
+					active.push({ current: to, visited: visited, dupes: dupes });
+				}
+				//*/
+				/*
+				let dupes = a.dupes, visited = a.visited;
+				for (let i = 0; i < visited.length; i++) {
+					if (visited[i] === to) {
+						dupes++;
+						break;
 					}
 				}
+				if (dupes < 2) {
+					active.push({ current: to, visited: visited.concat([to]), dupes: dupes });
+				}
+				//*/
+				/*
+				let dupes = a.dupes + (a.visited.includes(to) ? 1 : 0);
+				if (dupes < 2) {
+					active.push({ current: to, visited: a.visited.concat([to]), dupes: dupes });
+				}
+				//*/
 			}
 		}
 		let iterations = 1000;
@@ -129,7 +124,7 @@ export class S12a extends Solver {
 		let end = Date.now();
 		this.setState({ longerPaths: paths, active: active, elapsed: end - this.state.start });
 		if (active.length > 0)
-			setTimeout(() => this.longerPaths(connections), 1);
+			setTimeout(() => this.longerPaths(connections, active), 1);
 	}
 
 	solve(input) {
