@@ -36,10 +36,11 @@ export class S14a extends Solver {
 			mapper[r[0] + r[1]] = [r[0] + r[2], r[2] + r[1]];
 		});
 		let sums = new Aggregator(rules);
+		let add = (k, n) => n.add(k, mapper, sums);
 		for (let i = 1; i < template.length; i++) { sums[template[i - 1] + template[i]]++; }
 		while (count-- > 0) {
 			let newSums = new Aggregator(rules);
-			Object.keys(sums).forEach(k => newSums.add(k, mapper, sums));
+			Object.keys(sums).forEach(k => add(k, newSums));
 			sums = newSums;
 		}
 		return sums.elemValue(template);
