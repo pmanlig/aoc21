@@ -22,12 +22,10 @@ export class S17a extends Solver {
 			maxy: Math.max(input[2], input[3])
 		}
 		let length = x => (x + 1) * x / 2;
-		let depth = (y, n) => y * n - n * (n - 1) / 2;
 		let minXVelocity = 0;
 		let maxYVelocity = -(target.miny + 1);
 		while (length(minXVelocity) < input[0]) minXVelocity++;
-		let ymax = 0;
-		for (let n = 1; n < 2 * maxYVelocity + 2; n++) { if (depth(maxYVelocity, n) > ymax) { ymax = depth(maxYVelocity, n); } }
+		let ymax = maxYVelocity*(maxYVelocity+1)/2;
 		let options = 0;
 		for (let xv = minXVelocity; xv <= target.maxx; xv++) {
 			for (let yv = target.miny; yv <= maxYVelocity; yv++) {
