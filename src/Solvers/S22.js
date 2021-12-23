@@ -47,6 +47,7 @@ class Region {
 	}
 
 	split(b) {
+		if (this.disjoint(b)) return [this];
 		let r = this.splitX(b.fx);
 		r = r.map(a => a.disjoint(b) ? a : a.splitX(b.tx)).flat();
 		r = r.map(a => a.disjoint(b) ? a : a.splitY(b.fy)).flat();
