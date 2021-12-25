@@ -43,6 +43,12 @@ class Map {
 }
 
 export class S25a extends Solver {
+	stylemap = {
+		">": "#7FFF7F",
+		"v": "#0F7F0F",
+		".": "#000000"
+	}
+
 	solve(input) {
 		// let o1 = "v...>>.vv> .vv>>.vv.. >>.>v>...v >>v>>.>.v. v>v.vv.v.. >.>>..v... .vv..>.>v. v.v..>>v.v ....v..v.>";
 		// let t1 = "....>.>v.> v.v>.>v.v. >v>>..>v.. >>v>v>.>.v .>v.v...v. v>>.>vvv.. ..v...>>.. vv...>>vv. >.v.v..v.v";
@@ -56,7 +62,7 @@ export class S25a extends Solver {
 		let map = new Map(input.split('\n').map(l => l.split('')));
 		lim = 1000;
 		while (lim-- > 0 && map.move());
-		this.setState({ solution: `Number of steps: ${map.steps}` });
+		this.setState({ solution: `Number of steps: ${map.steps}`, data: map.data, scale: 4, stylemap: c => this.stylemap[c] });
 	}
 }
 
